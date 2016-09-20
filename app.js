@@ -1,13 +1,15 @@
 var truckEndpoint = 'https://data.sfgov.org/resource/6a9r-agq8.json';
-//var truckEndpoint = 'data/data.json';
 var googleGeocoder = 'https://maps.google.com/maps/api/geocode/json?address=';
 
 var AppObj = function AppObj(){
   AppObj = AppObj || {};
   AppObj.data = {
+    trucksData : {},
     state : {
-      currentLocationCoords: {},
-      markers: []
+      markers: [],
+      rangeValue: null,
+      currentLocation: null,
+      currentLatLong: [],
     }
   };
   return AppObj;
@@ -45,13 +47,13 @@ var semicolonsToBreaks = function semicolonsToBreaks(str){
   return str.replace(exp,'<br />');
 };
 
-var removeHours = function removeHours(str){
-  return str.split(':')[0];
-}
-
 var spaceColon = function spaceColon(str){
   var exp = /:/gi;
   return str.replace(exp,': ');
+}
+
+var removeHours = function removeHours(str){
+  return str.split(':')[0];
 }
 
 var getDayFromLine = function getDayFromLine(str){
@@ -60,7 +62,7 @@ var getDayFromLine = function getDayFromLine(str){
 
 var getDaysByRange = function getDaysByRange(str){
   var dotw = getDotw(),daysOpen = [],splitStr,firstDay,
-     lastDay,indexFirst,indexLast;
+  lastDay,indexFirst,indexLast;
 
   str = removeHours(str);
   splitStr = str.split('-');
@@ -108,6 +110,16 @@ var daysOpen = function daysOpen(str){
   return openDays;
 };
 
+var truckOpenDayFormatter = function truckOpenDayFormatter(str){
+  if(str.indexOf(';')>-1){
+    str = semicolonsToBreaks(str);
+  }
+  if(str.indexOf(':')>-1){
+    str = spaceColon(str);
+  }
+  return str;
+};
+
 // Truck Specific Functionality
 
 var TrucksModel = Backbone.Model.extend({
@@ -132,10 +144,6 @@ var TrucksCollection = Backbone.Collection.extend({
   }
 });
 
-var TruckListView = Backbone.View.extend({
-  el: "#truck-list",
-  className: 'truck'
-});
 
 var findClosestCoords = function findClosestCoords( data, coords){
   var long1 = data.location.coordinates[0];
@@ -189,7 +197,6 @@ var updateLocationLatLongUI = function updateLocationLatLongUI(currentLatLong){
   }
 };
 
-
 // refactor to check if need be removed but for now delete all.
 var removePins = function removePins(){
   if(AppObj.data.state.markers){
@@ -198,23 +205,6 @@ var removePins = function removePins(){
     });
   }
 };
-
-
-var truckOpenDayFormatter = function truckOpenDayFormatter(str){
-  if(str.indexOf(';')>-1){
-    str = semicolonsToBreaks(str);
-  }
-  if(str.indexOf(':')>-1){
-    str = spaceColon(str);
-  }
-  return str;
-};
-
-var truckIcon = L.icon({
-  iconUrl: 'assets/truck.svg',
-  iconSize: [40,40],
-  iconAnchor: [20,20]
-});
 
 var dropPinsForTrucks = function dropPinsForTrucks(closeTrucks){
   var markersUpdated = [];
