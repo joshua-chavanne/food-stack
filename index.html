@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+*    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="node_modules/backbone/backbone-min.js"></script>
+    <script type="text/javascript" src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript">
+      var trucksData = new TrucksCollection();
+      var queryPoints = [-122.4193139 ,37.7723856];
+      var acceptableDistance = .25;
+      trucksData.fetch().then(function() {
+        console.log(trucksData.length);
+      });
+      var truckList = new TruckListView();
+      var closestTrucks = filterCloseTrucks(queryPoints,acceptableDistance);
+    </script>
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Modak|Baloo+Bhaina" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <h1>Truck and Carter</h1>
+      <h2>San Francisco Food Truck Finder</h2>
+    </header>
+    <div id="mapid"></div>
+    <div id="controls" class="open">
+      <div id="controller">[x]</div>
+      <form>
+        <label>Location:</label><br />
+        <input id="locationInput" type="text" name="locationInput" placeholder="Please enter any San Francisco address"/>
+        <div id="locationLatLong"><span></span></div>
+        <label>Range (miles): </label><span id="distanceValue">.25</span><br />
+        <input id="distanceControl" type="range" name="acceptableDistance" min=".01" max=7 step=".01" value=".25" />
+        <button id="formSubmit" type="submit" name="button">Submit</button>
+      </form>
+    </div>
+    <div id="status">
+    </div>
+    <footer>
+      <div>Made across the Bay with Love in Oakland, Ca<br /> by <br />Joshua Chavanne 2016</div>
+    </footer>
+  </body>
+    <script type="text/javascript" src="ui.js"></script>
+    <script type="text/javascript">
+      var mymap = L.map('mapid').setView([37.7723856, -122.4193139], 14);
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/cit7w6057002s2xmf3idb5i87/tiles/256/{z}/{x}/{y}?access_token={access_token}', {
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          maxZoom: 20,
+          minZoom: 2,
+          id: AppConfig.data.mapboxId,
+          access_token: AppConfig.data.accessToken
+      }).addTo(mymap);
+    </script>
+</html>

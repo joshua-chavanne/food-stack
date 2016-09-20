@@ -1,0 +1,18 @@
+{
+  "name": "food-stack",
+  "version": "1.0.0",
+  "description": "San Francisco Food Truck Service",
+  "main": "index.html",
+  "dependencies": {
+    "backbone": "^1.3.3",
+    "jquery": "^3.1.0",
+    "leaflet": "^0.7.7",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joshua Chavanne <joshua.chavanne@gmail.com>",
+  "license": "Apache-2.0"
+}
