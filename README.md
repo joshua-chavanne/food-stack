@@ -2,8 +2,11 @@
 ___
 ## San Francisco Food Truck Search Service
 
-A simple search by range for food trucks in San Francisco using data.sfgov.org,
+A simple search by location and range (in miles) for food trucks in San Francisco using data.sfgov.org,
 focused on making a small front-end view.
+
+Can be viewed live at: [http://laudable.info](http://laudable.info)
+Primary repo at: [https://github.com/joshua-chavanne/food-stack](https://github.com/joshua-chavanne/food-stack)
 
 Requirements:
  * [JQuery (tested with JQuery 3.1.0)](https://jquery.com/download/)
