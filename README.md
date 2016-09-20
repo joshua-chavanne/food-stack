@@ -2,6 +2,9 @@
 ___
 ## San Francisco Food Truck Search Service
 
+A simple search by range for food trucks in San Francisco using data.sfgov.org,
+focused on making a small front-end view.
+
 Requirements:
  * [JQuery (tested with JQuery 3.1.0)](https://jquery.com/download/)
  * [Underscore (underscore 1.8.3)](http://underscorejs.org/)
@@ -53,9 +56,10 @@ Visit index.html in your browser, or configure your server to serve it.
 #### Step Three
 * Follow Step Two from Quick install.
 
+### Todos:
+(Things I'd do had I spent more time on this)
+ * Parse the non-normalized days, and allow sort by days open.
+ * Use better practices for library loading and passing of data to AppObj
 
 Attributions:
  - [Distance Formula - Geodatasource.com (LGPLv3)](http://www.geodatasource.com/developers/javascript)
- - Food Truck Icon (Public Domain License):
-  - Asset: https://thenounproject.com/term/food-truck/745/
-  - Author: https://thenounproject.com/Iconathon1/
