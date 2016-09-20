@@ -1,8 +1,3 @@
-var trucksData = new TrucksCollection();
-var queryPoints = [-122.4193139 ,37.7723856];
-var acceptableDistance = .25;
-var closeTrucks;
-
 var truckIcon = L.icon({
   iconUrl: 'assets/truck.svg',
   iconSize: [40,40],
@@ -52,8 +47,14 @@ $('#controller').click(function(e){
 });
 
 $(document).ready(function(){
+  var trucksData = new TrucksCollection();
+
   trucksData.fetch().then(function() {
-    var closeTrucks = filterCloseTrucks(queryPoints,acceptableDistance);
-    dropPinsForTrucks(closeTrucks);
+    if(AppObj){
+      var closeTrucks;
+      AppObj.data.trucksData = trucksData;
+      closeTrucks = filterCloseTrucks(AppObj.data.state.currentLatLong, AppObj.data.state.rangeValue);
+      dropPinsForTrucks(AppObj.data.state.closeTrucks);
+    }
   });
 });

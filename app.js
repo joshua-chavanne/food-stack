@@ -7,9 +7,10 @@ var AppObj = function AppObj(){
     trucksData : {},
     state : {
       markers: [],
-      rangeValue: null,
+      rangeValue: 0.25,
       currentLocation: null,
-      currentLatLong: [],
+      currentLatLong: [-122.4193139 ,37.7723856],
+      closeTrucks : [],
     }
   };
   return AppObj;
@@ -148,21 +149,24 @@ var TrucksCollection = Backbone.Collection.extend({
 var findClosestCoords = function findClosestCoords( data, coords){
   var long1 = data.location.coordinates[0];
   var lat1 = data.location.coordinates[1];
-  var long2 = queryPoints[0];
-  var lat2 = queryPoints[1];
+  var long2 = coords[0];
+  var lat2 = coords[1];
   return distance(long1,lat1,long2,lat2,'M');
 }
 
 function filterCloseTrucks(queryPoints,acceptableDistance){
   var closeTrucks = [];
-  _.mapObject(trucksData.models,function(val,key){
+  _.mapObject(AppObj.data.trucksData.models,function(val,key){
     var thisTruck = val.attributes;
-    truckDistance = findClosestCoords(thisTruck,queryPoints);
+    truckDistance = findClosestCoords(thisTruck,AppObj.data.state.currentLatLong);
     if(truckDistance < acceptableDistance && thisTruck.status === "APPROVED"){
       thisTruck.distance = truckDistance;
       closeTrucks.push(val);
     }
   });
+  if(AppObj){
+    AppObj.data.state.closeTrucks = closeTrucks;
+  }
   return closeTrucks;
 }
 
@@ -182,7 +186,7 @@ function getAddress(googleGeocoder,locationToPass){
     updateLocationLatLongUI(currentLatLong);
     if(mymap){
       //mymap.removeLayer(marker);
-      dropPinsForTrucks(closeTrucks);
+      dropPinsForTrucks(AppObj.data.state.closeTrucks);
     }
 
   });
@@ -222,6 +226,4 @@ var dropPinsForTrucks = function dropPinsForTrucks(closeTrucks){
     markerId.bindPopup('<strong>'+applicant+'</strong><br />'+fooditems+'<hr />'+locDesc+'<br />'+days);
     AppObj.data.state.markers.push(markerId);
   });
-
-
 }
